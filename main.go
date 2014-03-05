@@ -4,9 +4,12 @@ import "github.com/liujianping/wechat"
 import "github.com/liujianping/wechat/entry"
 
 type Echo struct{
+	Name string
 	wechat.Callback
 }
-
+func NewEcho(name string) *Echo{
+	return &Echo{Name:name}
+}
 func (e *Echo) MsgText(txt *entry.TextRequest, back chan interface{}){
 	wechat.Info("Echo: MsgText ", txt)
 }
@@ -39,6 +42,6 @@ func main() {
 	wechat.SetLogger("console", "")
 	app := wechat.NewWeChatApp()
 	app.SetConfig("ini", "demo.ini")	
-	app.SetCallback(new(Echo))
+	app.SetCallback(NewEcho("demo"))
 	app.Run()	
 }
