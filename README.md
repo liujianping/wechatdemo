@@ -5,6 +5,7 @@
 ````
 package main 
 
+import "fmt"
 import "github.com/liujianping/wechat"
 import "github.com/liujianping/wechat/entry"
 
@@ -34,13 +35,22 @@ func (e *Echo) Location(location *entry.LocationRequest, back chan interface{}){
 	wechat.Info("Echo: Location ", location)
 }
 
-func (e *Echo) EventSubscribe(oid string, back chan interface{}){
+func (e *Echo) EventSubscribe(appoid string, oid string, back chan interface{}){
 	wechat.Info("Echo: EventSubscribe ", oid)
+	var subscriber entry.Subscriber
+	if err := e.Api.GetSubscriber(oid, &subscriber); err != nil {
+		wechat.Error("Echo: get subscriber failed ", err)
+	}
+
+	response := entry.NewTextResponse(appoid, oid, fmt.Sprintf("%s 欢迎您的关注!", subscriber.Nickname))
+
+	back <- response
 }
-func (e *Echo) EventUnsubscribe(oid string, back chan interface{}){
+func (e *Echo) EventUnsubscribe(appoid string, oid string, back chan interface{}){
 	wechat.Info("Echo: EventUnsubscribe ", oid)	
+
 }
-func (e *Echo) EventMenu(oid string, key string, back chan interface{}){
+func (e *Echo) EventMenu(appoid string, oid string, key string, back chan interface{}){
 	wechat.Info("Echo: EventMenu ", oid, key)	
 }
 
@@ -49,13 +59,31 @@ func main() {
 	app := wechat.NewWeChatApp()
 	app.SetConfig("ini", "demo.ini")	
 	app.SetCallback(NewEcho("demo"))
+
+	//! 添加菜单
+	menu := entry.NewMenu()
+	btn1 := entry.NewViewButton("新浪","http://sina.com")
+	btn2 := entry.NewClickButton("点击","EVENT_MENU_CLICK")
+	btn3 := entry.NewButton("更多")
+	btn3.Append(entry.NewViewButton("腾讯","http://qq.com"))
+	btn3.Append(entry.NewViewButton("百度","http://baidu.com"))
+	btn3.Append(entry.NewViewButton("google","http://google.com"))
+	menu.Add(btn1)
+	menu.Add(btn2)
+	menu.Add(btn3)
+
+	app.SetMenu(menu)
+
+
 	app.Run()
 }
+
 ````
 
 ## 编译
 
-
+	go get github.com/liujianping/wechat
+	go get github.com/liujianping/wechatdemo
 	cd src/github.com/liujianping/wechatdemo
 	go build
 
