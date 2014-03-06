@@ -38,6 +38,7 @@ func (e *Echo) EventSubscribe(appoid string, oid string, back chan interface{}){
 	}
 
 	response := entry.NewTextResponse(appoid, oid, fmt.Sprintf("%s 欢迎您的关注!", subscriber.Nickname))
+
 	back <- response
 }
 func (e *Echo) EventUnsubscribe(appoid string, oid string, back chan interface{}){
@@ -61,7 +62,7 @@ func main() {
 	btn3 := entry.NewButton("更多")
 	btn3.Append(entry.NewViewButton("腾讯","http://qq.com"))
 	btn3.Append(entry.NewViewButton("百度","http://baidu.com"))
-	btn3.Append(entry.NewViewButton("点评","http://dianping.com"))
+	btn3.Append(entry.NewViewButton("google","http://google.com"))
 	menu.Add(btn1)
 	menu.Add(btn2)
 	menu.Add(btn3)
