@@ -44,5 +44,21 @@ func main() {
 	app := wechat.NewWeChatApp()
 	app.SetConfig("ini", "demo.ini")	
 	app.SetCallback(NewEcho("demo"))
+
+	//! 添加菜单
+	menu := entry.NewMenu()
+	btn1 := entry.NewViewButton("新浪","http://sina.com")
+	btn2 := entry.NewClickButton("点击","EVENT_MENU_CLICK")
+	btn3 := entry.NewButton("更多")
+	btn3.Append(entry.NewViewButton("腾讯","http://qq.com"))
+	btn3.Append(entry.NewViewButton("百度","http://baidu.com"))
+	btn3.Append(entry.NewViewButton("点评","http://dianping.com"))
+	menu.Add(btn1)
+	menu.Add(btn2)
+	menu.Add(btn3)
+
+	app.SetMenu(menu)
+
+
 	app.Run()
 }
