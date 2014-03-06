@@ -8,7 +8,7 @@ type Echo struct{
 	wechat.Callback
 }
 func NewEcho(name string) *Echo{
-	return &Echo{Name:name}
+	return &Echo{name, wechat.Callback{}}
 }
 func (e *Echo) MsgText(txt *entry.TextRequest, back chan interface{}){
 	wechat.Info("Echo: MsgText ", txt)
