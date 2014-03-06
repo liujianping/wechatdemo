@@ -1,5 +1,6 @@
 package main 
 
+import "fmt"
 import "github.com/liujianping/wechat"
 import "github.com/liujianping/wechat/entry"
 
@@ -29,13 +30,21 @@ func (e *Echo) Location(location *entry.LocationRequest, back chan interface{}){
 	wechat.Info("Echo: Location ", location)
 }
 
-func (e *Echo) EventSubscribe(oid string, back chan interface{}){
+func (e *Echo) EventSubscribe(appoid string, oid string, back chan interface{}){
 	wechat.Info("Echo: EventSubscribe ", oid)
+	var subscriber entry.Subscriber
+	if err := e.Api.GetSubscriber(oid, &subscriber); err != nil {
+		wechat.Error("Echo: get subscriber failed ", err)
+	}
+
+	response := entry.NewTextResponse(appoid, oid, fmt.Sprintf("%s 欢迎您的关注!", subscriber.Nickname))
+	back <- response
 }
-func (e *Echo) EventUnsubscribe(oid string, back chan interface{}){
+func (e *Echo) EventUnsubscribe(appoid string, oid string, back chan interface{}){
 	wechat.Info("Echo: EventUnsubscribe ", oid)	
+
 }
-func (e *Echo) EventMenu(oid string, key string, back chan interface{}){
+func (e *Echo) EventMenu(appoid string, oid string, key string, back chan interface{}){
 	wechat.Info("Echo: EventMenu ", oid, key)	
 }
 
