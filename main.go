@@ -28,6 +28,7 @@ func (e *Echo) MsgLink(link *entry.LinkRequest, back chan interface{}){
 func (e *Echo) Location(location *entry.LocationRequest, back chan interface{}){
 	wechat.Info("Echo: Location ", location)
 }
+
 func (e *Echo) EventSubscribe(oid string, back chan interface{}){
 	wechat.Info("Echo: EventSubscribe ", oid)
 }
@@ -43,5 +44,5 @@ func main() {
 	app := wechat.NewWeChatApp()
 	app.SetConfig("ini", "demo.ini")	
 	app.SetCallback(NewEcho("demo"))
-	app.Run()	
+	app.Run()
 }
